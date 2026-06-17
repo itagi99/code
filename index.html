@@ -1,160 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>QRUPI Star - UPI QR Code Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="manifest.json">
-  <!-- QR Code Styling library -->
-  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
-  <style>
-    /* (same style as previous enhanced code) */
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f8; padding: 0; margin: 0; min-height: 100vh;}
-    .container { background: #fff; box-shadow: 0 6px 24px rgba(33,118,212,0.10); border-radius: 18px; margin: 42px auto; max-width: 400px; padding: 32px 24px 32px 24px; text-align: center;}
-    .logo { width: 85px; margin-bottom: 23px;}
-    h2 { color: #2176D4; font-weight: 700; margin-bottom: 10px; font-size: 2rem;}
-    .security-note { background: #eaf7ff; color: #2157a3; border-radius: 7px; padding: 9px 18px; margin: 12px 0 16px 0; display: flex; align-items: center; gap: 10px; font-size: 1rem;}
-    label { display: block; text-align: left; margin-bottom: 4px; font-size: 1rem; color: #2176D4; font-weight: 600;}
-    input { width: 100%; padding: 10px; margin-bottom: 16px; border: 1px solid #bcdffa; border-radius: 7px; font-size: 1rem; background: #f8f9fa;}
-    button { background: linear-gradient(90deg, #2176D4 60%, #FFD700 100%); color: #fff; font-weight: 700; border: none; border-radius: 7px; padding: 12px 28px; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 8px rgba(33,118,212,0.10); margin-bottom: 10px; margin-top: 7px;}
-    button:hover { background: linear-gradient(90deg, #2157a3 60%, #ffbf00 100%);}
-    #qr { margin-top: 18px;}
-    .amount-display { font-size: 1.4em; margin-bottom: 12px; font-weight: bold; color: #2176D4; text-align: center;}
-    .download-link, .timer-text { display: block; color: #2176D4; font-size: 1rem; font-weight: 700; margin-bottom: 10px; margin-top: 4px; text-decoration: none; text-align: center;}
-    .whatsapp-share { background: #25d366; color: #fff; border: none; border-radius: 7px; padding: 10px 22px; font-size: 1rem; font-weight: 600; margin-bottom: 8px; cursor: pointer; margin-right: 8px;}
-    .whatsapp-share:hover { background: #128c7e;}
-    .policy, .contact, .about, .testimonial { margin-top: 32px; padding: 20px; border-radius: 8px; background: #eaf7ff; color: #2157a3; text-align: left; font-size: 1em;}
-    .footer { margin-top: 30px; font-size: 1rem; color: #999; text-align: center;}
-    .testimonial { font-style: italic; color: #2176D4; background: #f9fae7; border-left: 4px solid #FFD700;}
-    #popup { display:none; position:fixed; left:50%; top:22%; transform:translate(-50%, -50%); z-index:9999; background:#eaf7ff; color:#2157a3; padding:22px 32px; border-radius:16px; font-size:1.25em; box-shadow:0 8px 32px rgba(33,118,212,0.20); font-weight:bold; letter-spacing:1px;}
-    @media (max-width: 600px) { .container { max-width: 96vw; padding: 14px; } h2 { font-size: 1.3rem; } #popup {padding:12px 14px;} }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Rate Sheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="container">
-    <img class="logo" src="https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/152a89ef-6c80-4ca9-8b05-c8564a57034d.png" alt="QRUPI Star Logo">
-    <h2>QRUPI Star</h2>
-    <p style="margin-bottom:22px;color:#555;">Secure payments anytime, anywhere</p>
-    <div class="security-note">
-      <span style="font-size:1.25em; margin-right:6px;">🔒</span>
-      <span>Your payment details are never stored. Site is protected with HTTPS encryption.</span>
+<body class="bg-gray-100 p-4 md:p-8 font-sans">
+
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        
+        <!-- Header -->
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <h1 class="text-3xl font-bold">Daily Rate Sheet</h1>
+            <p class="text-sm mt-2 opacity-80">Live product rates and stock availability</p>
+        </div>
+
+        <!-- Controls (Search & Filter) -->
+        <div class="p-6 bg-gray-50 border-b flex flex-col md:flex-row gap-4 justify-between items-center">
+            
+            <div class="w-full md:w-1/2 relative">
+                <input type="text" id="searchInput" placeholder="Search products..." 
+                    class="w-full pl-4 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="w-full md:w-1/3">
+                <select id="categoryFilter" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                    <option value="ALL">All Categories</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- Data Table -->
+        <div class="overflow-x-auto p-6">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Product Name</th>
+                        <th class="py-3 px-6 text-left">Category</th>
+                        <th class="py-3 px-6 text-center">Sales Rate</th>
+                        <th class="py-3 px-6 text-center">Purchase Rate</th>
+                        <th class="py-3 px-6 text-center">Stock Qty</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="text-gray-600 text-sm font-light">
+                    <tr>
+                        <td colspan="5" class="py-10 text-center text-gray-500">Loading live data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <label for="amount">Amount (optional)</label>
-    <input id="amount" type="text" placeholder="Enter amount">
-    <label for="purpose">Purpose/Message (optional)</label>
-    <input id="purpose" type="text" placeholder="Payment purpose">
-    <button onclick="generateQR()">Generate QR Code</button>
-    <div id="qr"></div>
-    <div id="popup"></div>
-    <div class="policy"><b>Privacy Policy</b><br>QRUPI Star does <b>not collect or store</b> your UPI ID or any payment data.<br>All QR codes are generated <span style="color:#FFD700;"><b>safely within your browser</b></span>. Your payment information always remains private with you.</div>
-    <div class="testimonial"><b>Why shop owners love QRUPI Star:</b><br>“Branding my UPI QR builds customer trust!”<br>“Customers pay instantly from WhatsApp!”<br><i>– Local Merchants in India</i></div>
-    <div class="about"><b>About QRUPI Star</b><br>Our mission: Power easy and secure UPI payments for every merchant, small business, and professional in India.</div>
-    <div class="contact"><b>Contact/Suggestions</b><br>Need help or want to share feedback?<br>Email: support@qrupistar.in</div>
-    <div class="footer">&copy; 2025 QRUPI Star | Powered by UPI<br><span style="font-size:0.92em;">Last updated: August 2025</span></div>
-  </div>
-  <script>
-    const upiId = '7795966127@ybl';
-    const logoUrl = "https://user-gen-media-assets.s3.amazonaws.com/gpt4o_images/aef23796-e939-4f9d-9e7b-24f8b4e09c32.png";
-    let qrCode, timer, remainingSec = 120;
-    const brandColors = ["#2176D4", "#FFD700", "#25d366", "#FF5733", "#800080", "#000"];
 
-    function getRandomColor() {
-      return brandColors[Math.floor(Math.random()*brandColors.length)];
-    }
+    <script>
+        // --- 🔴 REPLACE THESE WITH YOUR TURSO DETAILS 🔴 ---
+        const TURSO_URL = "https://kata-itagi99.aws-ap-south-1.turso.io";
+        const TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODE2OTgwMDEsImlkIjoiMDE5ZWNmOGYtMzQwMS03OGE4LTllYzEtN2UwZGE0NjM2M2MzIiwicmlkIjoiOWExNjU2MjktNDEyMC00MzhmLThkMWEtZTRkMDJkMTYyZDk3In0.UxrtU2ohc2fnj101Um9KTtnifImTnVTLAs23HlbfeRFfmH60_PMx8fWu43ENgU5y-rdINt2bfUc5tc3mRZPBDA";
+        // ----------------------------------------------------
 
-    function showPopup(msg) {
-      const pop = document.getElementById('popup');
-      pop.innerText = msg;
-      pop.style.display = 'block';
-      setTimeout(() => { pop.style.display = 'none'; }, 1800);
-    }
+        let products = [];
 
-    function generateQR() {
-      const amount = document.getElementById('amount').value.trim();
-      const purpose = document.getElementById('purpose').value.trim();
-      const color = getRandomColor();
+        async function fetchRates() {
+            try {
+                const response = await fetch(`${TURSO_URL}/v2/pipeline`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${TURSO_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        requests: [
+                            { type: "execute", stmt: { sql: "SELECT * FROM rates" } },
+                            { type: "close" }
+                        ]
+                    })
+                });
 
-      if (!upiId.match(/^[\w.-]+@[\w]+$/)) { showPopup("Invalid UPI ID!"); return; }
-      if (amount && isNaN(amount)) { showPopup("Amount must be a number!"); return;}
+                const data = await response.json();
+                
+                // Turso HTTP API returns data in columns and rows arrays. We need to map them.
+                const result = data.results[0].response.result;
+                const columns = result.cols.map(c => c.name);
+                
+                products = result.rows.map(row => {
+                    let obj = {};
+                    row.forEach((value, index) => {
+                        obj[columns[index]] = value.value;
+                    });
+                    return obj;
+                });
 
-      let upiString = `upi://pay?pa=${upiId}`;
-      if (amount) upiString += `&am=${amount}`;
-      if (purpose) upiString += `&tn=${encodeURIComponent(purpose)}`;
+                populateCategories();
+                renderTable(products);
 
-      document.getElementById('qr').innerHTML = '';
-      clearInterval(timer);
-
-      qrCode = new QRCodeStyling({
-        width: 200,
-        height: 200,
-        type: "canvas",
-        data: upiString,
-        image: logoUrl,
-        dotsOptions: { color: color, type: "rounded" },
-        imageOptions: { crossOrigin: "anonymous", width: 40, height: 40 },
-        backgroundOptions: { color: "#fff" }
-      });
-      qrCode.append(document.getElementById('qr'));
-      
-      if (amount) {
-        const amtDiv = document.createElement('div');
-        amtDiv.className = "amount-display";
-        amtDiv.innerText = `₹${amount}`;
-        document.getElementById('qr').appendChild(amtDiv);
-      }
-
-      const dl = document.createElement('a');
-      dl.className = 'download-link';
-      dl.innerText = 'Download QR';
-      dl.href = '#';
-      dl.onclick = function(e){ e.preventDefault(); qrCode.download({ extension: "png" }); showPopup("QR downloaded!"); }
-      document.getElementById('qr').appendChild(dl);
-
-      const waBtn = document.createElement('button');
-      waBtn.className = 'whatsapp-share';
-      waBtn.innerText = 'Share QR on WhatsApp';
-      waBtn.onclick = function(){
-        qrCode.getRawData("png").then(blob => {
-          const message = `Pay me with UPI!\n${upiString}`;
-          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`);
-        });
-        showPopup("WhatsApp share opened!");
-      };
-      document.getElementById('qr').appendChild(waBtn);
-
-      remainingSec = 120;
-      const timerDiv = document.createElement('span');
-      timerDiv.className = "timer-text";
-      timerDiv.innerText = "QR visible for 2:00 minutes";
-      document.getElementById('qr').appendChild(timerDiv);
-
-      timer = setInterval(() => {
-        remainingSec--;
-        if (remainingSec > 0) {
-          const min = String(Math.floor(remainingSec/60)).padStart(2,'0');
-          const sec = String(remainingSec%60).padStart(2,'0');
-          timerDiv.innerText = `QR visible for ${min}:${sec} minutes`;
-        } else {
-          document.getElementById('qr').innerHTML = '';
-          clearInterval(timer);
-          showPopup("QR closed after 2 mins for security.");
+            } catch (error) {
+                document.getElementById("tableBody").innerHTML = `<tr><td colspan="5" class="py-10 text-center text-red-500">Failed to connect to database. Check URL and Token.</td></tr>`;
+                console.error("Database connection error:", error);
+            }
         }
-      }, 1000);
 
-      showPopup("QR generated!");
-    }
-  </script>
-  <script>
-  // PWA registration
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js').then(
-        function(registration) { /* success */ }, 
-        function(err) { /* error */ }
-      );
-    });
-  }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+        function populateCategories() {
+            const select = document.getElementById("categoryFilter");
+            const uniqueCategories = [...new Set(products.map(p => p.category))].filter(Boolean).sort();
+            
+            uniqueCategories.forEach(category => {
+                const option = document.createElement("option");
+                option.value = category;
+                option.textContent = category;
+                select.appendChild(option);
+            });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById("tableBody");
+            tbody.innerHTML = ""; 
+
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-gray-500">No products found.</td></tr>`;
+                return;
+            }
+
+            data.forEach((item, index) => {
+                const rowClass = index % 2 === 0 ? "bg-gray-50" : "bg-white";
+                const stockColor = item.stock_qty < 0 ? 'text-red-600' : 'text-gray-700';
+                
+                const tr = document.createElement("tr");
+                tr.className = `${rowClass} border-b border-gray-200 hover:bg-gray-100 transition-colors`;
+                tr.innerHTML = `
+                    <td class="py-3 px-6 text-left whitespace-nowrap font-medium text-gray-900">${item.product_name || '-'}</td>
+                    <td class="py-3 px-6 text-left text-xs"><span class="bg-blue-100 text-blue-800 py-1 px-2 rounded-full">${item.category || '-'}</span></td>
+                    <td class="py-3 px-6 text-center font-bold text-green-600">${item.sales_rate || '-'}</td>
+                    <td class="py-3 px-6 text-center text-red-500">${item.purc_rate || '-'}</td>
+                    <td class="py-3 px-6 text-center font-semibold ${stockColor}">${item.stock_qty || '0'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleFilter() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            const categoryFilter = document.getElementById("categoryFilter").value;
+
+            const filteredData = products.filter(product => {
+                const name = (product.product_name || "").toLowerCase();
+                const matchesSearch = name.includes(searchTerm);
+                const matchesCategory = categoryFilter === "ALL" || product.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            renderTable(filteredData);
+        }
+
+        document.getElementById("searchInput").addEventListener("keyup", handleFilter);
+        document.getElementById("categoryFilter").addEventListener("change", handleFilter);
+
+        // Fetch data when the page loads
+        fetchRates();
+    </script>
 </body>
 </html>
